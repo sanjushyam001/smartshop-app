@@ -8,16 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Role {
 
 	@Id
@@ -32,6 +32,11 @@ public class Role {
 
 	@Column(length = 40, nullable = false, unique = true)
 	private String name;
+	
 	@Column(length = 150, nullable = false)
 	private String description;
+	
+	public String toString() {
+		return this.name;
+	}
 }
