@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.smartshop.common.entity.Role;
 import com.smartshop.common.entity.User;
 
-import net.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeName;
 
 /**
  * UserService class provides functionality related to user management. It
@@ -25,7 +25,7 @@ import net.bytebuddy.asm.Advice.OffsetMapping.ForOrigin.Renderer.ForReturnTypeNa
 @Transactional
 public class UserService {
 
-	private static final Integer USERS_PER_PAGE=4;
+	public static final int USERS_PER_PAGE=4;
 	@Autowired
 	private UserRepository userRepository;
 
@@ -121,8 +121,12 @@ public class UserService {
      *@return A Page object containing the requested users.
      */
 	
-	public Page<User> listByPage(Integer pageNumber){
-		Pageable pageable = PageRequest.of(pageNumber-1, USERS_PER_PAGE);
+	public Page<User> listByPage(Integer pageNumber,String sortField,String sortDir){
+		
+		Sort sort = Sort.by(sortField);
+		sort=sortDir.equals("asc")?sort.ascending():sort.descending();
+		
+		Pageable pageable = PageRequest.of(pageNumber-1, USERS_PER_PAGE,sort);
 		return userRepository.findAll(pageable);
 	}
 	public void delete(Integer id) {

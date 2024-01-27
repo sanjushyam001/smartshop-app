@@ -1,11 +1,13 @@
 package com.smartshop.admin.user;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,13 +32,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("/users")
-	public String listAll(Model model) {
-		List<User> listUsers = userService.listAll();
-		model.addAttribute("listUsers", listUsers);
-		model.addAttribute("pageTitle", "Create New User");
-		return "users";
-	}
+//	@GetMapping("/users")
+//	public String listAll(Model model) {
+//		List<User> listUsers = userService.listAll();
+//		model.addAttribute("listUsers", listUsers);
+//		model.addAttribute("pageTitle", "Create New User");
+//		return "users";
+//	}
 	/*
 	 * public List<User> listAll(){ return userService.listAll(); }
 	 */
@@ -129,17 +131,42 @@ public class UserController {
 
 		return "redirect:/users";
 	}
+	@GetMapping("/users")
+	public String listFirstPage(Model model) {
+		return listByPage(1, model,"firstName","asc");
+	}
 	
 	@GetMapping("/users/page/{pageNumber}")
-	public String listByPage(@PathVariable Integer pageNumber,Model model) {
+	public String listByPage(@PathVariable Integer pageNumber,
+			Model model,
+			@Param("sortField") String sortField,
+			@Param("sortDir")  String sortDir) {
 		
-		Page<User> page = userService.listByPage(pageNumber);
+		Page<User> page = userService.listByPage(pageNumber,sortField,sortDir);
 		System.out.println("Page Number : "+pageNumber);
 		System.out.println("Total Elements : "+page.getTotalElements());
 		System.out.println("Total Pages: "+page.getTotalPages());
-		List<User> users = page.getContent();
 		
+		int startCount=(pageNumber-1)*userService.USERS_PER_PAGE+1;
+		System.out.println("START COUNT: "+startCount);
+		int endCount=startCount+userService.USERS_PER_PAGE-1;
+		System.out.println("END COUNT: "+endCount);
+		if(endCount>page.getTotalElements()) {
+			endCount= (int) page.getTotalElements();
+		}
+		List<User> users = page.getContent();
+		model.addAttribute("currentPage", pageNumber);
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalItems",page.getTotalElements());
 		model.addAttribute("listUsers", users);
+		model.addAttribute("sortField", sortField);
+		String reverseSortDir=sortDir.equals("asc")?"desc":"asc";
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("reverseSortDir", reverseSortDir);
+//		model.addAttribute("totalItems",0);
+//		model.addAttribute("listUsers", new ArrayList<>());
 		return "users";
 	}
 }
