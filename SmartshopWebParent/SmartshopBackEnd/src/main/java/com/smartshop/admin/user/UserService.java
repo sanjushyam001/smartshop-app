@@ -41,7 +41,7 @@ public class UserService {
 	 * @return A list of User objects containing user information .
 	 */
 	public List<User> listAll() {
-		return userRepository.findAll();
+		return userRepository.findAll(Sort.by("firstName").ascending());
 	}
 
 	/**

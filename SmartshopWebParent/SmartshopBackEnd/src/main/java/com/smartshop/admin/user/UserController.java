@@ -1,8 +1,13 @@
 package com.smartshop.admin.user;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,5 +175,26 @@ public class UserController {
 //		model.addAttribute("totalItems",0);
 //		model.addAttribute("listUsers", new ArrayList<>());
 		return "users";
+	}
+	@GetMapping("/users/export/csv")
+	public void exportToCSV(HttpServletResponse response) throws Exception {
+		
+		
+		UserCsvExporter exporter=new UserCsvExporter();
+		exporter.export(userService.listAll(), response);
+	}
+	@GetMapping("/users/export/excel")
+	public void exportToExcel(HttpServletResponse response) throws Exception {
+		
+		
+		UserExcelExporter exporter=new UserExcelExporter();
+		exporter.export(userService.listAll(), response);
+	}
+	@GetMapping("/users/export/pdf")
+	public void exportToPdf(HttpServletResponse response) throws IOException {
+	
+		List<User> listUser = userService.listAll();
+		UserPdfExporter exporter= new UserPdfExporter();
+		exporter.export(listUser, response);
 	}
 }
