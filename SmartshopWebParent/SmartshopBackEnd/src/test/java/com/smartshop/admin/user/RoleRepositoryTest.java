@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.smartshop.admin.user.repository.RoleRepository;
 import com.smartshop.common.entity.Role;
 
 @DataJpaTest

@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
+import com.smartshop.admin.user.repository.UserRepository;
 import com.smartshop.common.entity.Role;
 import com.smartshop.common.entity.User;
 

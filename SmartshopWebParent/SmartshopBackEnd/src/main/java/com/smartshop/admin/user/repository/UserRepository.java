@@ -1,4 +1,4 @@
-package com.smartshop.admin.user;
+package com.smartshop.admin.user.repository;
 
 
 import org.springframework.data.domain.Page;

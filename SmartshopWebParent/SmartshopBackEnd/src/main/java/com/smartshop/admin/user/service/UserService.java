@@ -1,4 +1,4 @@
-package com.smartshop.admin.user;
+package com.smartshop.admin.user.service;
 
 import java.util.List;
 
@@ -12,6 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.smartshop.admin.user.exception.UserNotFoundException;
+import com.smartshop.admin.user.repository.RoleRepository;
+import com.smartshop.admin.user.repository.UserRepository;
 import com.smartshop.common.entity.Role;
 import com.smartshop.common.entity.User;
 
